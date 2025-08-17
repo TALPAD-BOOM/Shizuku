@@ -1,10 +1,12 @@
 package moe.shizuku.manager.home
 
 import android.annotation.SuppressLint
+import android.app.ActivityOptions
 import android.app.Dialog
 import android.content.ActivityNotFoundException
 import android.content.Context
 import android.content.Intent
+import android.graphics.Rect
 import android.os.Build.VERSION_CODES
 import android.os.Bundle
 import android.provider.Settings
@@ -33,6 +35,7 @@ import moe.shizuku.manager.adb.AdbPairingClient
 import moe.shizuku.manager.adb.PreferenceAdbKeyStore
 import moe.shizuku.manager.databinding.AdbPairDialogBinding
 import rikka.lifecycle.viewModels
+import java.lang.reflect.Method
 import java.net.ConnectException
 
 @RequiresApi(VERSION_CODES.R)
@@ -69,11 +72,24 @@ class AdbPairDialogFragment : DialogFragment() {
         dialog.getButton(AlertDialog.BUTTON_POSITIVE).isVisible = false
 
         dialog.getButton(AlertDialog.BUTTON_NEUTRAL).setOnClickListener {
-            val intent = Intent(Settings.ACTION_APPLICATION_DEVELOPMENT_SETTINGS)
-            intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
-            intent.putExtra(":settings:fragment_args_key", "toggle_adb_wireless")
+            val intent = Intent(Settings.ACTION_SETTINGS)
+            intent.flags = Intent.FLAG_ACTIVITY_LAUNCH_ADJACENT or Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_MULTIPLE_TASK
+//            intent.putExtra(":settings:fragment_args_key", "toggle_adb_wireless")
+            val options: ActivityOptions = ActivityOptions.makeBasic()
+            // Setting launch windowing mode to free-form
+            val freeformStackId = 5
             try {
-                it.context.startActivity(intent)
+                val method: Method = ActivityOptions::class.java.getMethod(
+                    "setLaunchWindowingMode",
+                    Int::class.javaPrimitiveType
+                )
+                method.invoke(options, freeformStackId)
+            } catch (e: Exception) { /* Gracefully fail */
+            }
+            val bounds = Rect(0, 0, 1300, 1450)
+            options.setLaunchBounds(bounds)
+            try {
+                it.context.startActivity(intent, options.toBundle())
             } catch (e: ActivityNotFoundException) {
             }
         }

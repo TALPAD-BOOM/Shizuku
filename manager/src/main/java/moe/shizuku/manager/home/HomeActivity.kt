@@ -27,7 +27,7 @@ import rikka.recyclerview.addItemSpacing
 import rikka.recyclerview.fixEdgeEffect
 import rikka.shizuku.Shizuku
 
-abstract class HomeActivity : AppBarActivity() {
+class HomeActivity : AppBarActivity() {
 
     private val binderReceivedListener = Shizuku.OnBinderReceivedListener {
         checkServerStatus()

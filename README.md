@@ -1,4 +1,13 @@
-# Shizuku
+# Shizuku TALPAD edition 学而思定制版
+
+Fork from [yangFenTuoZi/Shizuku](https://github.com/yangFenTuoZi/Shizuku)
+
+为学而思学习机定制的 `Shizuku`，解决了学而思学习机系统屏蔽了通知标题、正文和互动部分导致 `Shizuku` 无法进行无线调试配对的问题
+
+- 需要配合安卓的“自由窗口模式”（`强制将 Activity 设为可调整大小`、`允许以多窗口模式显示不可调整大小的应用`、`启用可自由调整的窗口`）
+- 打开主界面会同时以窗口形式打开设置主界面及 `Shizuku` 主界面，无线调试配对输入配对码部分改为以对话框交互
+- 同时修复 `Shizuku 13.6.0` 版本引入的 `MT/NP 管理器` 启动时无法授权 Shell 权限的问题
+  （修复在 [Shizuku-API](https://gitea.fumor.top/TALPAD-BOOM/Shizuku-API)，为避免与原仓库产生冲突，未更新 Git Submodules，编译时需要手动将子模块替换为上述仓库的 `talpadboom` 分支文件）
 
 ## 免责声明
 
