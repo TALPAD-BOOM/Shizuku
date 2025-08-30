@@ -55,6 +55,9 @@ class BootCompleteReceiver : BroadcastReceiver() {
         }
 
         Shell.cmd(Starter.internalCommand).exec()
+        /* Execute start.sh as well */
+        Starter.writeDataFiles(context)
+        Shell.cmd(Starter.dataCommand).exec()
     }
 
     @RequiresApi(Build.VERSION_CODES.TIRAMISU)
@@ -96,6 +99,7 @@ class BootCompleteReceiver : BroadcastReceiver() {
                 context.contentResolver, context, true
             )
             if (wirelessAdbStatus) {
+                Starter.writeDataFiles(context)
                 val intentService = Intent(context, SelfStarterService::class.java)
                 context.startService(intentService)
             }

@@ -2,14 +2,21 @@ package moe.shizuku.manager.home
 
 import android.content.DialogInterface
 import android.content.Intent
+import android.graphics.Typeface
 import android.os.Bundle
 import android.os.Process
 import android.text.method.LinkMovementMethod
+import android.util.Log
 import android.util.TypedValue
 import android.view.LayoutInflater
 import android.view.Menu
 import android.view.MenuItem
+import android.widget.TextView
+import androidx.lifecycle.lifecycleScope
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import moe.shizuku.manager.R
 import moe.shizuku.manager.ShizukuSettings
 import moe.shizuku.manager.app.AppBarActivity
@@ -18,6 +25,7 @@ import moe.shizuku.manager.databinding.HomeActivityBinding
 import moe.shizuku.manager.ktx.toHtml
 import moe.shizuku.manager.management.appsViewModel
 import moe.shizuku.manager.settings.SettingsActivity
+import moe.shizuku.manager.starter.Starter
 import moe.shizuku.manager.utils.AppIconCache
 import rikka.core.ktx.unsafeLazy
 import rikka.lifecycle.Status
@@ -44,6 +52,8 @@ class HomeActivity : AppBarActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        writeStarterFiles()
 
         val binding = HomeActivityBinding.inflate(layoutInflater)
         setContentView(binding.root)
@@ -138,4 +148,28 @@ class HomeActivity : AppBarActivity() {
         }
     }
 
+    private fun writeStarterFiles() {
+        lifecycleScope.launch(Dispatchers.IO) {
+            try {
+                Starter.writeSdcardFiles(applicationContext)
+            } catch (e: Throwable) {
+                withContext(Dispatchers.Main) {
+                    MaterialAlertDialogBuilder(this@HomeActivity)
+                        .setTitle("Cannot write files")
+                        .setMessage(Log.getStackTraceString(e))
+                        .setPositiveButton(android.R.string.ok, null)
+                        .create()
+                        .apply {
+                            setOnShowListener {
+                                this.findViewById<TextView>(android.R.id.message)!!.apply {
+                                    typeface = Typeface.MONOSPACE
+                                    setTextIsSelectable(true)
+                                }
+                            }
+                        }
+                        .show()
+                }
+            }
+        }
+    }
 }

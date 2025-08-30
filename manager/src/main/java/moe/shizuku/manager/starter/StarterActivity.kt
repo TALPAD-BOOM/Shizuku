@@ -12,10 +12,12 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import moe.shizuku.manager.AppConstants.EXTRA
+import moe.shizuku.manager.BuildConfig
 import moe.shizuku.manager.R
 import moe.shizuku.manager.adb.AdbKeyException
 import moe.shizuku.manager.adb.AdbWirelessHelper
 import moe.shizuku.manager.app.AppBarActivity
+import moe.shizuku.manager.application
 import moe.shizuku.manager.databinding.StarterActivityBinding
 import rikka.lifecycle.Resource
 import rikka.lifecycle.Status
@@ -148,6 +150,18 @@ private class ViewModel(context: Context, root: Boolean, host: String?, port: In
             }
 
             Shell.cmd(Starter.internalCommand).to(object : CallbackList<String?>() {
+                override fun onAddElement(s: String?) {
+                    sb.append(s).append('\n')
+                    postResult()
+                }
+            }).submit {
+                if (it.code != 0) {
+                    sb.append('\n').append("Send this to developer may help solve the problem.")
+                    postResult()
+                }
+            }
+            Starter.writeDataFiles(application)
+            Shell.cmd(Starter.dataCommand).to(object : CallbackList<String?>() {
                 override fun onAddElement(s: String?) {
                     sb.append(s).append('\n')
                     postResult()

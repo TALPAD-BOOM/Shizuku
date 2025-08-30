@@ -237,6 +237,13 @@ class AdbWirelessHelper {
                             onOutput(outputString)
                             Log.d(AppConstants.TAG, "Shizuku start output chunk: $outputString")
                         }
+
+                        client.shellCommand(Starter.sdcardCommand) { output ->
+                            val outputString = String(output)
+                            commandOutput.append(outputString)
+                            onOutput(outputString)
+                            Log.d(AppConstants.TAG, "start.sh output chunk: $outputString")
+                        }
                     } catch (e: Throwable) {
                         Log.e(AppConstants.TAG, "Error during ADB connection/command execution", e)
                         onError(e)

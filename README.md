@@ -6,6 +6,9 @@ Fork from [yangFenTuoZi/Shizuku](https://github.com/yangFenTuoZi/Shizuku)
 
 - 需要配合安卓的“自由窗口模式”（`强制将 Activity 设为可调整大小`、`允许以多窗口模式显示不可调整大小的应用`、`启用可自由调整的窗口`）
 - 打开主界面会同时以窗口形式打开设置主界面及 `Shizuku` 主界面，无线调试配对输入配对码部分改为以对话框交互
+- 增加仅授权一次 `Shizuku` 权限功能
+- 每次启动会同时授予 `InstallerX` 和 `MT 管理器` 的 `所有文件访问权限` 及 `安装未知来源应用` 权限，避免系统在重启后撤销以上特殊权限导致无法安装应用
+- 用户可以创建 `/sdcard/talpad.sh` Shell 脚本在每次启动时以 `Shell` 用户执行命令
 - 同时修复 `Shizuku 13.6.0` 版本引入的 `MT/NP 管理器` 启动时无法授权 Shell 权限的问题
   （修复在 [Shizuku-API](https://gitea.fumor.top/TALPAD-BOOM/Shizuku-API)，为避免与原仓库产生冲突，未更新 Git Submodules，编译时需要手动将子模块替换为上述仓库的 `talpadboom` 分支文件）
 
