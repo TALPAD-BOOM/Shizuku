@@ -16,6 +16,7 @@ class ShizukuReceiver : BroadcastReceiver() {
         if ("rikka.shizuku.intent.action.REQUEST_BINDER" == intent.action) {
             ShellBinderRequestHandler.handleRequest(context, intent)
         }
+        /* FIXME comment it for: Unable to start receiver moe.shizuku.manager.receiver.ShizukuReceiver: android.app.BackgroundServiceStartNotAllowedException: Not allowed to start service
         if (!ServiceStatus().isRunning) {
             val startOnBootWirelessIsEnabled = ShizukuSettings.getPreferences()
                 .getBoolean(ShizukuSettings.KEEP_START_ON_BOOT_WIRELESS, false)
@@ -28,6 +29,6 @@ class ShizukuReceiver : BroadcastReceiver() {
                     context.startService(intentService)
                 }
             }
-        }
+        }*/
     }
 }

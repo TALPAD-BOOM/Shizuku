@@ -91,7 +91,7 @@ public class ServiceStarter {
     }
 
     private static int retryCount;
-    static String packageName = "moe.shizuku.privileged.api";
+    static String packageName = "com.tal.pad.program";
     static IContentProvider provider = null;
 
     private static void sendBinder(IBinder binder, String token) {

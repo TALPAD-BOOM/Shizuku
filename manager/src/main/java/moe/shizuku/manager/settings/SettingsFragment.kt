@@ -351,8 +351,9 @@ class SettingsFragment : PreferenceFragmentCompat() {
 
     private fun updatePreferenceStates(componentName: ComponentName) {
         val isComponentEnabled = context?.packageManager?.isComponentEnabled(componentName) == true
+        // Set startOnBootWirelessPreference as default
         val isWirelessBootEnabled =
-            ShizukuSettings.getPreferences().getBoolean(KEEP_START_ON_BOOT_WIRELESS, false)
+            ShizukuSettings.getPreferences().getBoolean(KEEP_START_ON_BOOT_WIRELESS, true)
         val hasSecurePermission = ContextCompat.checkSelfPermission(
             requireContext(), Manifest.permission.WRITE_SECURE_SETTINGS
         ) == PackageManager.PERMISSION_GRANTED

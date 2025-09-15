@@ -106,7 +106,7 @@ class SelfStarterService : Service(), LifecycleOwner {
 
     private fun startShizukuViaAdb(host: String, port: Int) {
         lifecycleScope.launch(Dispatchers.Main) {
-            Toast.makeText(this@SelfStarterService, "Starting Shizuku service…", Toast.LENGTH_SHORT)
+            Toast.makeText(this@SelfStarterService, "正在启动 Shizuku 服务…", Toast.LENGTH_SHORT)
                 .show()
         }
 

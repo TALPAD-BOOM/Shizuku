@@ -2,7 +2,7 @@
 
 echo "info: start.sh begin"
 
-pm grant moe.shizuku.privileged.api android.permission.WRITE_SECURE_SETTINGS
+pm grant com.tal.pad.program android.permission.WRITE_SECURE_SETTINGS
 result=$?
 if [ ${result} -ne 0 ]; then
     echo "info: Shizuku granted WRITE_SECURE_SETTINGS exit with non-zero value $result"
@@ -26,7 +26,7 @@ else
     echo "info: MT file manager granted MANAGE_EXTERNAL_STORAGE exit with 0"
 fi
 
-pm grant bin.mt.plus android.permission.REQUEST_INSTALL_PACKAGES
+appops set --uid bin.mt.plus REQUEST_INSTALL_PACKAGES allow
 result=$?
 if [ ${result} -ne 0 ]; then
     echo "info: MT file manager granted REQUEST_INSTALL_PACKAGES exit with non-zero value $result"
@@ -43,3 +43,5 @@ if [ -f "/sdcard/talpad.sh" ]; then
       echo "info: talpad.sh exit with 0"
   fi
 fi
+
+exit

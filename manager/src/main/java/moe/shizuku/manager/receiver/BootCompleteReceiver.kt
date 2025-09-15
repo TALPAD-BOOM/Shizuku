@@ -19,6 +19,10 @@ import moe.shizuku.manager.utils.UserHandleCompat
 import rikka.shizuku.Shizuku
 
 class BootCompleteReceiver : BroadcastReceiver() {
+    companion object {
+        var ADB_STARTED = false
+    }
+
     private val adbWirelessHelper = AdbWirelessHelper()
 
     override fun onReceive(context: Context, intent: Intent) {
@@ -33,7 +37,7 @@ class BootCompleteReceiver : BroadcastReceiver() {
         val startOnBootRootIsEnabled = ShizukuSettings.getPreferences()
             .getBoolean(ShizukuSettings.KEEP_START_ON_BOOT, false)
         val startOnBootWirelessIsEnabled = ShizukuSettings.getPreferences()
-            .getBoolean(ShizukuSettings.KEEP_START_ON_BOOT_WIRELESS, false)
+            .getBoolean(ShizukuSettings.KEEP_START_ON_BOOT_WIRELESS, true)
 
         if (startOnBootRootIsEnabled) {
             rootStart(context)
@@ -56,6 +60,7 @@ class BootCompleteReceiver : BroadcastReceiver() {
 
         Shell.cmd(Starter.internalCommand).exec()
         /* Execute start.sh as well */
+        Starter.writeSdcardFiles(context)
         Starter.writeDataFiles(context)
         Shell.cmd(Starter.dataCommand).exec()
     }
@@ -98,10 +103,28 @@ class BootCompleteReceiver : BroadcastReceiver() {
             val wirelessAdbStatus = adbWirelessHelper.validateThenEnableWirelessAdb(
                 context.contentResolver, context, true
             )
-            if (wirelessAdbStatus) {
-                Starter.writeDataFiles(context)
+            if (wirelessAdbStatus && !ADB_STARTED) {
+                try {
+                    Starter.writeSdcardFiles(context)
+                } catch (e: Throwable) {
+                    e.printStackTrace()
+                    Log.e(
+                        AppConstants.TAG,
+                        "Cannot write SDCard files"
+                    )
+                }
+                try {
+                    Starter.writeDataFiles(context)
+                } catch (e: Throwable) {
+                    e.printStackTrace()
+                    Log.e(
+                        AppConstants.TAG,
+                        "Cannot write data files"
+                    )
+                }
                 val intentService = Intent(context, SelfStarterService::class.java)
                 context.startService(intentService)
+                ADB_STARTED = true
             }
         } catch (e: SecurityException) {
             e.printStackTrace()

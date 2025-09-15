@@ -4,9 +4,10 @@ Fork from [yangFenTuoZi/Shizuku](https://github.com/yangFenTuoZi/Shizuku)
 
 为学而思学习机定制的 `Shizuku`，解决了学而思学习机系统屏蔽了通知标题、正文和互动部分导致 `Shizuku` 无法进行无线调试配对的问题
 
-- 需要配合安卓的“自由窗口模式”（`强制将 Activity 设为可调整大小`、`允许以多窗口模式显示不可调整大小的应用`、`启用可自由调整的窗口`）
+- 需要配合安卓的“自由窗口模式”（在 `开发者模式` 下启用 `强制将 Activity 设为可调整大小`、`允许以多窗口模式显示不可调整大小的应用`、`启用可自由调整的窗口`）
 - 打开主界面会同时以窗口形式打开设置主界面及 `Shizuku` 主界面，无线调试配对输入配对码部分改为以对话框交互
 - 增加仅授权一次 `Shizuku` 权限功能
+- 伪装包名为 `学而思编程` 以适配 `开机启动（无线调试）` 功能并默认启用，只要开机时在 Wi-Fi 环境下即可自动启动，开机后需要等待 1 分钟后再解锁进入桌面避免 shizuku_server 被杀
 - 每次启动会同时授予 `InstallerX` 和 `MT 管理器` 的 `所有文件访问权限` 及 `安装未知来源应用` 权限，避免系统在重启后撤销以上特殊权限导致无法安装应用
 - 用户可以创建 `/sdcard/talpad.sh` Shell 脚本在每次启动时以 `Shell` 用户执行命令
 - 同时修复 `Shizuku 13.6.0` 版本引入的 `MT/NP 管理器` 启动时无法授权 Shell 权限的问题
@@ -30,7 +31,7 @@ Fork from [yangFenTuoZi/Shizuku](https://github.com/yangFenTuoZi/Shizuku)
 1. 按照无线 ADB 配对流程配置 Shizuku
 2. 在 `设置` 中启用 `开机启动（无线调试）`
    - 启用前需先授予 `WRITE_SECURE_SETTINGS` 权限（可通过 `rish` 或使用电脑通过 ADB 完成 / **在 Shizuku 启动时通过 Manager 自动授权**）
-   - 执行以下命令 `adb shell pm grant moe.shizuku.privileged.api android.permission.WRITE_SECURE_SETTINGS`
+   - 执行以下命令 `adb shell pm grant com.tal.pad.program android.permission.WRITE_SECURE_SETTINGS`
 
 
 > [!CAUTION]

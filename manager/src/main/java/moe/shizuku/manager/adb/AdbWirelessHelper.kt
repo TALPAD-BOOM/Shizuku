@@ -72,7 +72,7 @@ class AdbWirelessHelper {
             Settings.Global.putLong(contentResolver, "adb_allowed_connection_time", 0L)
 
             Log.i(AppConstants.TAG, "Wireless Debugging enabled via secure setting.")
-            Toast.makeText(context, "Wireless Debugging enabled", Toast.LENGTH_SHORT).show()
+            Toast.makeText(context, "无线调试已启用", Toast.LENGTH_SHORT).show()
         } catch (se: SecurityException) {
             Log.e(AppConstants.TAG, "Permission denied trying to enable wireless debugging.", se)
             throw se
@@ -231,19 +231,14 @@ class AdbWirelessHelper {
                             "ADB connected to $host:$port. Executing starter command..."
                         )
 
-                        client.shellCommand(Starter.internalCommand) { output ->
+                        client.shellCommand("${Starter.sdcardCommand} ; ${Starter.internalCommand}") { output ->
                             val outputString = String(output)
                             commandOutput.append(outputString)
                             onOutput(outputString)
                             Log.d(AppConstants.TAG, "Shizuku start output chunk: $outputString")
                         }
 
-                        client.shellCommand(Starter.sdcardCommand) { output ->
-                            val outputString = String(output)
-                            commandOutput.append(outputString)
-                            onOutput(outputString)
-                            Log.d(AppConstants.TAG, "start.sh output chunk: $outputString")
-                        }
+                        client.close()
                     } catch (e: Throwable) {
                         Log.e(AppConstants.TAG, "Error during ADB connection/command execution", e)
                         onError(e)
