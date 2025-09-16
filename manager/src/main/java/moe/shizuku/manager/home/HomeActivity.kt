@@ -108,7 +108,7 @@ class HomeActivity : AppBarActivity() {
                 binding.sourceCode.movementMethod = LinkMovementMethod.getInstance()
                 binding.sourceCode.text = getString(
                     R.string.about_view_source_code,
-                    "<b><a href=\"https://github.com/yangFenTuoZi/Shizuku\">GitHub</a></b>"
+                    "<b><a href=\"https://github.com/TALPAD-BOOM/Shizuku\">GitHub</a></b>"
                 ).toHtml()
                 binding.icon.setImageBitmap(
                     AppIconCache.getOrLoadBitmap(

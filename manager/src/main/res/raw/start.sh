@@ -44,4 +44,26 @@ if [ -f "/sdcard/talpad.sh" ]; then
   fi
 fi
 
-exit
+i=1
+while [ $(($i)) -le 5 ]; do
+  pgrep -cf shizuku_server > /dev/null
+  result=$?
+  if [ ${result} -ne 0 ]; then
+    echo "info: Attempt #$i to run shizuku_starter..."
+    $1 $2
+    result=$?
+    if [ ${result} -ne 0 ]; then
+        echo "info: shizuku_starter exit with non-zero value $result"
+        exit ${result}
+    fi
+  fi
+  sleep 1
+  i=$((i + 1))
+done
+
+pgrep -cf shizuku_server > /dev/null
+result=$?
+if [ ${result} -ne 0 ]; then
+  echo "info: shizuku_starter was killed after 5 attempts"
+  exit 9
+fi

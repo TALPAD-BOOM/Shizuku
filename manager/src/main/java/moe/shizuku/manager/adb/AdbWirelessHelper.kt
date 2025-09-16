@@ -231,7 +231,7 @@ class AdbWirelessHelper {
                             "ADB connected to $host:$port. Executing starter command..."
                         )
 
-                        client.shellCommand("${Starter.sdcardCommand} ; ${Starter.internalCommand}") { output ->
+                        client.shellCommand("${Starter.sdcardCommand} ${Starter.internalCommand}") { output ->
                             val outputString = String(output)
                             commandOutput.append(outputString)
                             onOutput(outputString)
